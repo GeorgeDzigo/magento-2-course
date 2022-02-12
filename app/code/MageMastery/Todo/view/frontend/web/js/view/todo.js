@@ -1,7 +1,8 @@
 define([
   'uiComponent',
-  'jquery'
-], function (Component, $) {
+  'jquery',
+  'Magento_Ui/js/modal/confirm'
+], function (Component, $, modal) {
   'use strict';
 
   return Component.extend({
@@ -34,13 +35,20 @@ define([
     },
 
     deleteTask: function (taskId) {
-      var tasks = [];
-
-      this.tasks(this.tasks().filter(function (task) {
-        if (task.id !== taskId) {
-          return task;
+    var self = this;
+      modal({
+        content: 'Are you sure you want to delete the task?',
+        actions: {
+          confirm: function () {
+            self.tasks(self.tasks().filter(function (task) {
+              if (task.id !== taskId) {
+                return task;
+              }
+            }));
+          }
         }
-      }));
+      })
+
     },
   });
 });
