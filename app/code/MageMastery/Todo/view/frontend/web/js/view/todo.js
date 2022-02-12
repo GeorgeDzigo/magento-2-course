@@ -35,19 +35,16 @@ define([
     },
 
     deleteTask: function (taskId) {
-    var self = this;
       modal({
         content: 'Are you sure you want to delete the task?',
         actions: {
-          confirm: function () {
-            self.tasks(self.tasks().filter(function (task) {
-              if (task.id !== taskId) {
-                return task;
-              }
+          confirm: function() {
+            this.tasks(this.tasks().filter(function(task) {
+              if(task.id !== taskId) return task;
             }));
           }
         }
-      })
+      });
 
     },
   });
