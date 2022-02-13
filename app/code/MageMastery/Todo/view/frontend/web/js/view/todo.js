@@ -69,5 +69,11 @@ define([
       });
       this.newTaskLabel('');
     },
+    checkKey: function(data, event) {
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        $(this.buttonSelector).click();
+      }
+    }
   });
 });
