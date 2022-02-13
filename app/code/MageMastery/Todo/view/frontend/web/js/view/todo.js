@@ -7,16 +7,17 @@ define([
 
   return Component.extend({
     defaults: {
+      newTaskLabel: '',
       tasks: [
-        { id: 1, label: "Task 1", status: false },
-        { id: 2, label: "Task 2", status: false },
-        { id: 3, label: "Task 3", status: false },
-        { id: 4, label: "Task 4", status: true },
+        {id: 1, label: "Task 1", status: false},
+        {id: 2, label: "Task 2", status: false},
+        {id: 3, label: "Task 3", status: false},
+        {id: 4, label: "Task 4", status: true},
       ],
     },
 
     initObservable: function () {
-      this._super().observe(['tasks']);
+      this._super().observe(['tasks', 'newTaskLabel']);
 
       return this;
     },
@@ -35,17 +36,38 @@ define([
     },
 
     deleteTask: function (taskId) {
+      const self = this;
+
       modal({
         content: 'Are you sure you want to delete the task?',
         actions: {
           confirm: function() {
-            this.tasks(this.tasks().filter(function(task) {
-              if(task.id !== taskId) return task;
-            }));
-          }
-        }
-      });
+            var tasks = [];
 
+            if (self.tasks().length === 1) {
+              self.tasks(tasks);
+              return;
+            }
+
+            self.tasks().forEach(function (task) {
+              if (task.id !== taskId) {
+                tasks.push(task);
+              }
+            });
+
+            self.tasks(tasks);
+          }
+        },
+      });
+    },
+
+    addTask: function () {
+      this.tasks.push({
+        id: Math.floor(Math.random() * 100),
+        label: this.newTaskLabel(),
+        status: false
+      });
+      this.newTaskLabel('');
     },
   });
 });
